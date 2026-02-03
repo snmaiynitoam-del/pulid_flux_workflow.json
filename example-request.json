@@ -1,0 +1,174 @@
+{
+  "input": {
+    "workflow": {
+      "3": {
+        "inputs": {
+          "seed": 123456,
+          "steps": 20,
+          "cfg": 1,
+          "sampler_name": "euler",
+          "scheduler": "simple",
+          "denoise": 1,
+          "model": [
+            "30",
+            0
+          ],
+          "positive": [
+            "6",
+            0
+          ],
+          "negative": [
+            "7",
+            0
+          ],
+          "latent_image": [
+            "5",
+            0
+          ]
+        },
+        "class_type": "KSampler",
+        "_meta": {
+          "title": "KSampler"
+        }
+      },
+      "4": {
+        "inputs": {
+          "ckpt_name": "flux1-dev-fp8.safetensors"
+        },
+        "class_type": "CheckpointLoaderSimple",
+        "_meta": {
+          "title": "CheckpointLoaderSimple"
+        }
+      },
+      "5": {
+        "inputs": {
+          "value": 768
+        },
+        "class_type": "EmptyLatentImage",
+        "_meta": {
+          "title": "EmptyLatentImage"
+        }
+      },
+      "6": {
+        "inputs": {
+          "text": "beautiful woman, portrait, realistic, detailed face, natural lighting",
+          "clip": [
+            "4",
+            1
+          ]
+        },
+        "class_type": "CLIPTextEncode",
+        "_meta": {
+          "title": "CLIPTextEncode"
+        }
+      },
+      "7": {
+        "inputs": {
+          "text": "blurry, low quality, distorted, deformed, ugly, bad anatomy",
+          "clip": [
+            "4",
+            1
+          ]
+        },
+        "class_type": "CLIPTextEncode",
+        "_meta": {
+          "title": "CLIPTextEncode"
+        }
+      },
+      "8": {
+        "inputs": {
+          "samples": [
+            "3",
+            0
+          ],
+          "vae": [
+            "4",
+            2
+          ]
+        },
+        "class_type": "VAEDecode",
+        "_meta": {
+          "title": "VAEDecode"
+        }
+      },
+      "9": {
+        "inputs": {
+          "filename_prefix": "ComfyUI",
+          "images": [
+            "8",
+            0
+          ]
+        },
+        "class_type": "SaveImage",
+        "_meta": {
+          "title": "SaveImage"
+        }
+      },
+      "20": {
+        "inputs": {
+          "image": "face.png"
+        },
+        "class_type": "LoadImage",
+        "_meta": {
+          "title": "LoadImage"
+        }
+      },
+      "21": {
+        "inputs": {
+          "filename": "pulid_flux_v0.9.1.safetensors"
+        },
+        "class_type": "PulidFluxModelLoader",
+        "_meta": {
+          "title": "PulidFluxModelLoader"
+        }
+      },
+      "22": {
+        "inputs": {
+          "text": "CUDA"
+        },
+        "class_type": "PulidFluxInsightFaceLoader",
+        "_meta": {
+          "title": "PulidFluxInsightFaceLoader"
+        }
+      },
+      "23": {
+        "inputs": {
+          "filename": "EVA02_CLIP_L_336_psz14_s6B.pt"
+        },
+        "class_type": "PulidFluxEvaClipLoader",
+        "_meta": {
+          "title": "PulidFluxEvaClipLoader"
+        }
+      },
+      "30": {
+        "inputs": {
+          "value": 0.9,
+          "model": [
+            "4",
+            0
+          ],
+          "pulid_flux": [
+            "21",
+            0
+          ],
+          "eva_clip": [
+            "23",
+            0
+          ],
+          "face_analysis": [
+            "22",
+            0
+          ],
+          "image": [
+            "20",
+            0
+          ]
+        },
+        "class_type": "ApplyPulidFlux",
+        "_meta": {
+          "title": "ApplyPulidFlux"
+        }
+      }
+    }
+  }
+}
