@@ -1,9 +1,9 @@
 # clean base image containing only comfyui, comfy-cli and comfyui-manager
 FROM runpod/worker-comfyui:5.5.1-base
 
-# Download PuLID from GitHub codeload (direct download server, no redirects)
+# Download PuLID via GitHub proxy (GitHub is blocked in build env)
 RUN cd /comfyui/custom_nodes && \
-    wget --no-check-certificate -O pulid.zip https://codeload.github.com/cubiq/ComfyUI_PuLID/zip/refs/heads/main && \
+    wget --no-check-certificate -O pulid.zip "https://ghproxy.com/https://github.com/cubiq/ComfyUI_PuLID/archive/refs/heads/main.zip" && \
     python -c "import zipfile; zipfile.ZipFile('pulid.zip').extractall()" && \
     mv ComfyUI_PuLID-main ComfyUI_PuLID && \
     rm pulid.zip && \
