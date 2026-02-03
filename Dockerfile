@@ -1,19 +1,15 @@
 # clean base image containing only comfyui, comfy-cli and comfyui-manager
 FROM runpod/worker-comfyui:5.5.1-base
 
-# Download PuLID-Flux from HuggingFace (our own repo - guaranteed to work)
+# Clone PuLID-Flux from official GitHub repo (includes eva_clip folder)
 RUN cd /comfyui/custom_nodes && \
-    mkdir -p ComfyUI-PuLID-Flux && \
+    git clone https://github.com/balazik/ComfyUI-PuLID-Flux.git && \
     cd ComfyUI-PuLID-Flux && \
-    wget -O pulid.zip "https://huggingface.co/snailmana99/comfyui-pulid-flux/resolve/main/ComfyUI-PuLID-Flux.zip" && \
-    python -c "import zipfile; zipfile.ZipFile('pulid.zip').extractall('.')" && \
-    rm pulid.zip && \
     pip install -r requirements.txt && \
     echo "=== PuLID files installed ===" && \
     ls -la && \
-    echo "=== Testing import ===" && \
-    cd /comfyui && \
-    python -c "import sys; sys.path.insert(0, '.'); from custom_nodes import ComfyUI_PuLID_Flux" 2>&1 || echo "Import test (expected to fail outside ComfyUI context)"
+    echo "=== Checking eva_clip folder ===" && \
+    ls -la eva_clip/
 
 # Verify the custom node structure
 RUN echo "=== Verifying custom node structure ===" && \
