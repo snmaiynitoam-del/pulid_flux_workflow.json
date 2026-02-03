@@ -1,19 +1,13 @@
 # clean base image containing only comfyui, comfy-cli and comfyui-manager
 FROM runpod/worker-comfyui:5.5.1-base
 
-# Download PuLID via statically.io CDN (GitHub is blocked in build env)
-# This CDN mirrors GitHub content reliably
+# Download PuLID-Flux from HuggingFace (our own repo - guaranteed to work)
 RUN cd /comfyui/custom_nodes && \
-    mkdir -p ComfyUI_PuLID/eva_clip && \
-    cd ComfyUI_PuLID && \
-    wget --no-check-certificate -O __init__.py "https://cdn.statically.io/gh/cubiq/ComfyUI_PuLID/main/__init__.py" && \
-    wget --no-check-certificate -O pulid.py "https://cdn.statically.io/gh/cubiq/ComfyUI_PuLID/main/pulid.py" && \
-    wget --no-check-certificate -O encoders.py "https://cdn.statically.io/gh/cubiq/ComfyUI_PuLID/main/encoders.py" && \
-    wget --no-check-certificate -O encoders_flux.py "https://cdn.statically.io/gh/cubiq/ComfyUI_PuLID/main/encoders_flux.py" && \
-    wget --no-check-certificate -O requirements.txt "https://cdn.statically.io/gh/cubiq/ComfyUI_PuLID/main/requirements.txt" && \
-    wget --no-check-certificate -O eva_clip/__init__.py "https://cdn.statically.io/gh/cubiq/ComfyUI_PuLID/main/eva_clip/__init__.py" && \
-    wget --no-check-certificate -O eva_clip/eva_clip.py "https://cdn.statically.io/gh/cubiq/ComfyUI_PuLID/main/eva_clip/eva_clip.py" && \
-    wget --no-check-certificate -O eva_clip/transformer.py "https://cdn.statically.io/gh/cubiq/ComfyUI_PuLID/main/eva_clip/transformer.py" && \
+    wget -O ComfyUI-PuLID-Flux.zip "https://huggingface.co/snailmana99/comfyui-pulid-flux/resolve/main/ComfyUI-PuLID-Flux.zip" && \
+    python -c "import zipfile; zipfile.ZipFile('ComfyUI-PuLID-Flux.zip').extractall('.')" && \
+    mv pulid_code_temp ComfyUI-PuLID-Flux && \
+    rm ComfyUI-PuLID-Flux.zip && \
+    cd ComfyUI-PuLID-Flux && \
     pip install -r requirements.txt
 
 # Download Flux checkpoint to correct path
@@ -25,7 +19,7 @@ RUN comfy model download --url https://huggingface.co/guozinan/PuLID/resolve/mai
 # Download EVA-CLIP model
 RUN comfy model download --url https://huggingface.co/QuanSun/EVA-CLIP/resolve/main/EVA02_CLIP_L_336_psz14_s6B.pt --relative-path models/clip --filename EVA02_CLIP_L_336_psz14_s6B.pt
 
-# Download InsightFace antelopev2 models (using wget instead of curl)
+# Download InsightFace antelopev2 models
 RUN mkdir -p /comfyui/models/insightface/models/antelopev2 && \
     cd /comfyui/models/insightface/models/antelopev2 && \
     wget -O 1k3d68.onnx https://huggingface.co/MonsterMMORPG/tools/resolve/main/1k3d68.onnx && \
