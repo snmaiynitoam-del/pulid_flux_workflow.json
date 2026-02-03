@@ -20,9 +20,9 @@ RUN echo "=== Verifying custom node structure ===" && \
 # Download Flux UNET model (diffusion-only, for UNETLoader)
 RUN comfy model download --url https://huggingface.co/Kijai/flux-fp8/resolve/main/flux1-dev-fp8.safetensors --relative-path models/unet --filename flux1-dev-fp8.safetensors
 
-# Download Flux VAE (from public mirror)
+# Download Flux VAE (from Kijai mirror)
 RUN mkdir -p /comfyui/models/vae && \
-    wget -O /comfyui/models/vae/ae.safetensors "https://huggingface.co/Kijai/flux-fp8/resolve/main/ae.safetensors"
+    wget -O /comfyui/models/vae/ae.safetensors "https://huggingface.co/Kijai/flux-fp8/resolve/main/flux-vae-bf16.safetensors"
 
 # Download PuLID model to pulid folder
 RUN comfy model download --url https://huggingface.co/guozinan/PuLID/resolve/main/pulid_flux_v0.9.1.safetensors --relative-path models/pulid --filename pulid_flux_v0.9.1.safetensors
