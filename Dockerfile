@@ -1,8 +1,13 @@
 # clean base image containing only comfyui, comfy-cli and comfyui-manager
 FROM runpod/worker-comfyui:5.5.1-base
 
-# Download and install PuLID custom node using Python urllib (more reliable than wget/git in this env)
-RUN python -c "import urllib.request; urllib.request.urlretrieve('https://github.com/cubiq/ComfyUI_PuLID/archive/refs/heads/main.zip', '/tmp/pulid.zip')" && \
+# Download PuLID using Python with SSL bypass (GitHub has cert issues in build env)
+RUN python -c "import ssl, urllib.request; \
+ctx = ssl.create_default_context(); \
+ctx.check_hostname = False; \
+ctx.verify_mode = ssl.CERT_NONE; \
+req = urllib.request.urlopen('https://github.com/cubiq/ComfyUI_PuLID/archive/refs/heads/main.zip', context=ctx); \
+open('/tmp/pulid.zip', 'wb').write(req.read())" && \
     cd /comfyui/custom_nodes && \
     python -c "import zipfile; zipfile.ZipFile('/tmp/pulid.zip').extractall()" && \
     mv ComfyUI_PuLID-main ComfyUI_PuLID && \
