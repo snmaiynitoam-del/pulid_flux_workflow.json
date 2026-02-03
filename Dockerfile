@@ -3,11 +3,11 @@ FROM runpod/worker-comfyui:5.5.1-base
 
 # Download PuLID-Flux from HuggingFace (our own repo - guaranteed to work)
 RUN cd /comfyui/custom_nodes && \
-    wget -O ComfyUI-PuLID-Flux.zip "https://huggingface.co/snailmana99/comfyui-pulid-flux/resolve/main/ComfyUI-PuLID-Flux.zip" && \
-    python -c "import zipfile; zipfile.ZipFile('ComfyUI-PuLID-Flux.zip').extractall('.')" && \
-    mv pulid_code_temp ComfyUI-PuLID-Flux && \
-    rm ComfyUI-PuLID-Flux.zip && \
+    mkdir -p ComfyUI-PuLID-Flux && \
     cd ComfyUI-PuLID-Flux && \
+    wget -O pulid.zip "https://huggingface.co/snailmana99/comfyui-pulid-flux/resolve/main/ComfyUI-PuLID-Flux.zip" && \
+    python -c "import zipfile; zipfile.ZipFile('pulid.zip').extractall('.')" && \
+    rm pulid.zip && \
     pip install -r requirements.txt
 
 # Download Flux checkpoint to correct path
