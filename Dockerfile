@@ -8,7 +8,18 @@ RUN cd /comfyui/custom_nodes && \
     wget -O pulid.zip "https://huggingface.co/snailmana99/comfyui-pulid-flux/resolve/main/ComfyUI-PuLID-Flux.zip" && \
     python -c "import zipfile; zipfile.ZipFile('pulid.zip').extractall('.')" && \
     rm pulid.zip && \
-    pip install -r requirements.txt
+    pip install -r requirements.txt && \
+    echo "=== PuLID files installed ===" && \
+    ls -la && \
+    echo "=== Testing import ===" && \
+    cd /comfyui && \
+    python -c "import sys; sys.path.insert(0, '.'); from custom_nodes import ComfyUI_PuLID_Flux" 2>&1 || echo "Import test (expected to fail outside ComfyUI context)"
+
+# Verify the custom node structure
+RUN echo "=== Verifying custom node structure ===" && \
+    ls -la /comfyui/custom_nodes/ && \
+    ls -la /comfyui/custom_nodes/ComfyUI-PuLID-Flux/ && \
+    cat /comfyui/custom_nodes/ComfyUI-PuLID-Flux/__init__.py
 
 # Download Flux checkpoint to correct path
 RUN comfy model download --url https://huggingface.co/Kijai/flux-fp8/resolve/main/flux1-dev-fp8.safetensors --relative-path models/checkpoints --filename flux1-dev-fp8.safetensors
@@ -27,3 +38,7 @@ RUN mkdir -p /comfyui/models/insightface/models/antelopev2 && \
     wget -O genderage.onnx https://huggingface.co/MonsterMMORPG/tools/resolve/main/genderage.onnx && \
     wget -O glintr100.onnx https://huggingface.co/MonsterMMORPG/tools/resolve/main/glintr100.onnx && \
     wget -O scrfd_10g_bnkps.onnx https://huggingface.co/MonsterMMORPG/tools/resolve/main/scrfd_10g_bnkps.onnx
+
+# Final verification
+RUN echo "=== Final custom_nodes listing ===" && \
+    ls -la /comfyui/custom_nodes/
