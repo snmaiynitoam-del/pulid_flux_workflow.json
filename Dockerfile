@@ -18,7 +18,7 @@ RUN echo "=== Verifying custom node structure ===" && \
     cat /comfyui/custom_nodes/ComfyUI-PuLID-Flux/__init__.py
 
 # Download Flux UNET model (diffusion-only, for UNETLoader)
-RUN comfy model download --url https://huggingface.co/Kijai/flux-fp8/resolve/main/flux1-dev-fp8.safetensors --relative-path models/diffusion_models --filename flux1-dev-fp8.safetensors
+RUN comfy model download --url https://huggingface.co/Kijai/flux-fp8/resolve/main/flux1-dev-fp8.safetensors --relative-path models/unet --filename flux1-dev-fp8.safetensors
 
 # Download Flux VAE
 RUN comfy model download --url https://huggingface.co/black-forest-labs/FLUX.1-schnell/resolve/main/ae.safetensors --relative-path models/vae --filename ae.safetensors
