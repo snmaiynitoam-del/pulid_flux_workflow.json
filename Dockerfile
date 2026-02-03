@@ -23,8 +23,13 @@ RUN comfy model download --url https://huggingface.co/Kijai/flux-fp8/resolve/mai
 # Download PuLID model to pulid folder
 RUN comfy model download --url https://huggingface.co/guozinan/PuLID/resolve/main/pulid_flux_v0.9.1.safetensors --relative-path models/pulid --filename pulid_flux_v0.9.1.safetensors
 
-# Download EVA-CLIP model
+# Download EVA-CLIP model (for PuLID face analysis)
 RUN comfy model download --url https://huggingface.co/QuanSun/EVA-CLIP/resolve/main/EVA02_CLIP_L_336_psz14_s6B.pt --relative-path models/clip --filename EVA02_CLIP_L_336_psz14_s6B.pt
+
+# Download Flux text encoders (required for text-to-image)
+RUN comfy model download --url https://huggingface.co/comfyanonymous/flux_text_encoders/resolve/main/t5xxl_fp8_e4m3fn.safetensors --relative-path models/clip --filename t5xxl_fp8_e4m3fn.safetensors
+
+RUN comfy model download --url https://huggingface.co/comfyanonymous/flux_text_encoders/resolve/main/clip_l.safetensors --relative-path models/clip --filename clip_l.safetensors
 
 # Download InsightFace antelopev2 models
 RUN mkdir -p /comfyui/models/insightface/models/antelopev2 && \
