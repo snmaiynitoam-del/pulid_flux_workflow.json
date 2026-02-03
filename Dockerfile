@@ -1,13 +1,19 @@
 # clean base image containing only comfyui, comfy-cli and comfyui-manager
 FROM runpod/worker-comfyui:5.5.1-base
 
-# Download PuLID via GitHub proxy (GitHub is blocked in build env)
+# Download PuLID via statically.io CDN (GitHub is blocked in build env)
+# This CDN mirrors GitHub content reliably
 RUN cd /comfyui/custom_nodes && \
-    wget --no-check-certificate -O pulid.zip "https://ghproxy.com/https://github.com/cubiq/ComfyUI_PuLID/archive/refs/heads/main.zip" && \
-    python -c "import zipfile; zipfile.ZipFile('pulid.zip').extractall()" && \
-    mv ComfyUI_PuLID-main ComfyUI_PuLID && \
-    rm pulid.zip && \
+    mkdir -p ComfyUI_PuLID/eva_clip && \
     cd ComfyUI_PuLID && \
+    wget --no-check-certificate -O __init__.py "https://cdn.statically.io/gh/cubiq/ComfyUI_PuLID/main/__init__.py" && \
+    wget --no-check-certificate -O pulid.py "https://cdn.statically.io/gh/cubiq/ComfyUI_PuLID/main/pulid.py" && \
+    wget --no-check-certificate -O encoders.py "https://cdn.statically.io/gh/cubiq/ComfyUI_PuLID/main/encoders.py" && \
+    wget --no-check-certificate -O encoders_flux.py "https://cdn.statically.io/gh/cubiq/ComfyUI_PuLID/main/encoders_flux.py" && \
+    wget --no-check-certificate -O requirements.txt "https://cdn.statically.io/gh/cubiq/ComfyUI_PuLID/main/requirements.txt" && \
+    wget --no-check-certificate -O eva_clip/__init__.py "https://cdn.statically.io/gh/cubiq/ComfyUI_PuLID/main/eva_clip/__init__.py" && \
+    wget --no-check-certificate -O eva_clip/eva_clip.py "https://cdn.statically.io/gh/cubiq/ComfyUI_PuLID/main/eva_clip/eva_clip.py" && \
+    wget --no-check-certificate -O eva_clip/transformer.py "https://cdn.statically.io/gh/cubiq/ComfyUI_PuLID/main/eva_clip/transformer.py" && \
     pip install -r requirements.txt
 
 # Download Flux checkpoint to correct path
