@@ -6,6 +6,7 @@ RUN cd /comfyui/custom_nodes && \
     git clone https://github.com/balazik/ComfyUI-PuLID-Flux.git && \
     cd ComfyUI-PuLID-Flux && \
     pip install -r requirements.txt && \
+    pip install insightface==0.7.3 && \
     echo "=== PuLID files installed ===" && \
     ls -la && \
     echo "=== Checking eva_clip folder ===" && \
