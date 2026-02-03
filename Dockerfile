@@ -1,14 +1,8 @@
 # clean base image containing only comfyui, comfy-cli and comfyui-manager
 FROM runpod/worker-comfyui:5.5.1-base
 
-# Download PuLID custom node as zip (git clone has issues in this environment)
-RUN cd /comfyui/custom_nodes && \
-    wget https://github.com/cubiq/ComfyUI_PuLID/archive/refs/heads/main.zip -O pulid.zip && \
-    unzip pulid.zip && \
-    mv ComfyUI_PuLID-main ComfyUI_PuLID && \
-    rm pulid.zip && \
-    cd ComfyUI_PuLID && \
-    pip install -r requirements.txt
+# Install PuLID custom node using comfy-cli with git URL
+RUN comfy node install --url https://github.com/cubiq/ComfyUI_PuLID.git
 
 # Download Flux checkpoint to correct path
 RUN comfy model download --url https://huggingface.co/Kijai/flux-fp8/resolve/main/flux1-dev-fp8.safetensors --relative-path models/checkpoints --filename flux1-dev-fp8.safetensors
