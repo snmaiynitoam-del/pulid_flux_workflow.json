@@ -1,8 +1,11 @@
 # clean base image containing only comfyui, comfy-cli and comfyui-manager
 FROM runpod/worker-comfyui:5.5.1-base
 
-# Install PuLID custom node for Flux face conditioning
-RUN comfy node install comfyui-pulid --mode remote
+# Install PuLID custom node from GitHub (includes Flux support)
+RUN cd /comfyui/custom_nodes && \
+    git clone https://github.com/cubiq/ComfyUI_PuLID && \
+    cd ComfyUI_PuLID && \
+    pip install -r requirements.txt
 
 # Download Flux checkpoint to correct path
 RUN comfy model download --url https://huggingface.co/Kijai/flux-fp8/resolve/main/flux1-dev-fp8.safetensors --relative-path models/checkpoints --filename flux1-dev-fp8.safetensors
